@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+
+<!--
+	Lets us run some basic tooling.
+-->
+
+<project name="motomapia" default="update-objectify" basedir=".">
+
+	<property name="name" value="${ant.project.name}" />
+	
+	<property file="user.properties" />
+	<property file="${user.home}/build.properties" />
+	<property file="build.properties" />
+
+	<property name="src.dir" location="src" />
+	<property name="war.dir" location="war" />
+	<property name="lib.dir" location="${war.dir}/WEB-INF/lib" />
+	<property name="lib.buildonly.dir" location="build-only" />
+	<property name="classes.dir" location="${war.dir}/WEB-INF/classes" />
+
+	<target name="update-htmleasy" depends="">
+		<copy file="${m2.dir}/com/googlecode/htmleasy/htmleasy/0.7-SNAPSHOT/htmleasy-0.7-SNAPSHOT.jar" todir="${lib.dir}" />
+	</target>
+	
+	<target name="update-objectify" depends="">
+		<copy todir="${lib.dir}">
+			<fileset dir="../objectify/target">
+				<include name="objectify-*.jar" />
+			</fileset>
+			<regexpmapper from="objectify-[0-9]*.jar" to="objectify.jar" />
+		</copy>
+	</target>
+	
+	<target name="update-unsuck" depends="">
+		<copy file="../unsuck/target/unsuck.jar" todir="${lib.dir}" />
+	</target>
+</project>
