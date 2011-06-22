@@ -1,0 +1,6 @@
+appengine-*.jar
+datanucleus-*.jar
+geronimo-*.jar
+gwt-servlet.jar
+jdo2-*.jar
+jsr107cache-*.jar

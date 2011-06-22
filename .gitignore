@@ -1,0 +1,4 @@
+target/
+test-output/
+.sass-cache/
+.settings/
