@@ -1,3 +1,3 @@
 #!/bin/sh
 
-coffee --join war/motomapia.js --compile coffee/*.coffee
+coffee --watch --compile war/*.coffee

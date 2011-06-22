@@ -1,27 +1,27 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-<!-- The HTML 4.01 Transitional DOCTYPE declaration-->
-<!-- above set at the top of the file will set     -->
-<!-- the browser's rendering engine into           -->
-<!-- "Quirks Mode". Replacing this declaration     -->
-<!-- with a "Standards Mode" doctype is supported, -->
-<!-- but may lead to some differences in layout.   -->
+<!DOCTYPE html>
 
 <html>
-  <head>
-    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-    <title>Hello App Engine</title>
-  </head>
+	<head>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+		<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+		
+		<title>Motomapia - download Wikimapia to your GPS</title>
 
-  <body>
-    <h1>Hello App Engine!</h1>
-	
-    <table>
-      <tr>
-        <td colspan="2" style="font-weight:bold;">Available Servlets:</td>        
-      </tr>
-      <tr>
-        <td><a href="motomapia">Motomapia</a></td>
-      </tr>
-    </table>
-  </body>
+		<link rel="stylesheet" type="text/css" href="/motomapia.css" />
+		
+		<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
+		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js"></script>
+		<script type="text/javascript" src="/motomapia.js"></script>
+	</head>
+
+	<body>
+		<div id="map"></div>
+		
+		<table id="header">
+			<tr>
+				<td id="brand">Motomapia</td>
+				<td id="blah"></td>
+			</tr>
+		</table>
+	</body>
 </html>
