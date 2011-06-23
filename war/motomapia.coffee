@@ -66,7 +66,7 @@ class MotoMap
 
 	# Add a marker to our map
 	#
-	createMarker: (placemark) =>
+	createMarker: (placemark) ->
 		poly = new google.maps.Polygon
 			paths: decodePolyline(placemark.polygon)
 			strokeWeight: 1

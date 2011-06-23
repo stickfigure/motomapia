@@ -37,7 +37,6 @@
 };
   MotoMap = (function() {
     function MotoMap(domId) {
-      this.createMarker = __bind(this.createMarker, this);
       this.onIdle = __bind(this.onIdle, this);      var opts;
       opts = {
         zoom: 8,
