@@ -5,6 +5,7 @@ package com.motomapia.entity;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -16,15 +17,18 @@ import lombok.ToString;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.beoui.geocell.GeocellManager;
 import com.google.appengine.api.datastore.GeoPt;
 import com.googlecode.objectify.annotation.Cached;
 import com.googlecode.objectify.annotation.Indexed;
 import com.googlecode.objectify.annotation.Unindexed;
+import com.motomapia.util.GeoUtils;
+import com.motomapia.util.Utils;
 import com.motomapia.wikimapia.WikiPlace;
 
 /**
- * Our version of a Wikimapia place - we cache their data and add
- * a bit of our own.
+ * Cached version of a Wikimapia place.  Also includes geohash indexing so that
+ * we can fetch large numbers of points in a bounding box.
  * 
  * @author Jeff Schnitzer
  */
@@ -44,20 +48,17 @@ public class Place implements Serializable
 	@Id
 	@Getter long id;
 
-	/** When this record was created; the first time a user touched the data. */
-	@Getter Date created;
-
-	/** When the wikimapia data was last modified */
+	/** When this record was created or updated */
 	@Indexed
-	@Getter Date modified;
-	
+	@Getter Date updated;
+
 	/** Textual name in Wikimapia */
 	@Getter @Setter String name;
 	
 	/** Calculated centerpoint */
 	@Getter @Setter GeoPt center;
 	
-	/** Properly cleaned and converted.  Does *not* contain duplicate points */
+	/** Properly cleaned and converted polyline.  Does *not* contain duplicate points */
 	@Getter @Setter String polygon;
 	
 	/** Number of points in the polygon */
@@ -66,6 +67,10 @@ public class Place implements Serializable
 	/** Calculated area */
 	@Getter @Setter double area;
 	
+	/** A list of geohashed cells, suitable for queries */
+	@Indexed
+	@Getter List<String> cells;
+	
 	/** GAE & Objectify want this */
 	public Place() {}
 	
@@ -73,14 +78,7 @@ public class Place implements Serializable
 	public Place(WikiPlace wikiPlace)
 	{
 		this.id = wikiPlace.getId();
-		this.name = wikiPlace.getName();
-		this.center = wikiPlace.getCenter();
-		this.polygon = wikiPlace.getPolyline();
-		this.pointCount = wikiPlace.getPolygon().length;
-		this.area = wikiPlace.getArea();
-		
-		this.created = new Date();
-		this.modified = this.created;
+		this.updateFrom(wikiPlace);
 	}
 	
 	/**
@@ -94,34 +92,25 @@ public class Place implements Serializable
 
 		boolean changed = false;
 		
-		if (!this.name.equals(wikiPlace.getName()))
+		if (!Utils.safeEquals(this.name, wikiPlace.getName()))
 		{
 			this.name = wikiPlace.getName();
 			changed = true;
 		}
 		
-		if (!this.center.equals(wikiPlace.getCenter()))
-		{
-			this.center = wikiPlace.getCenter();
-			changed = true;
-		}
-
 		String wikiPolyline = wikiPlace.getPolyline();
 		if (!wikiPolyline.equals(this.polygon))
 		{
 			this.polygon = wikiPolyline;
 			this.pointCount = wikiPlace.getPolygon().length;
+			this.center = wikiPlace.getCenter();
+			this.area = wikiPlace.getArea();
+			this.cells = GeocellManager.generateGeoCell(GeoUtils.toPoint(this.center));
 			changed = true;
 		}
 		
-		if (this.area != wikiPlace.getArea())
-		{
-			this.area = wikiPlace.getArea();
-			changed = true;
-		}
-
 		if (changed)
-			this.modified = new Date();
+			this.updated = new Date();
 		
 		return changed;
 	}

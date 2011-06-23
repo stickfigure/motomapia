@@ -1,5 +1,5 @@
 (function() {
-  var MotoMap, decodePolyline;
+  var MotoMap, busy, decodePolyline;
   var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
   decodePolyline = function(encoded) {	
 	var len = encoded.length;
@@ -35,6 +35,9 @@
 
 	return array;
 };
+  busy = function(x) {
+    return $('#busy').css('visibility', x ? 'visible' : 'hidden');
+  };
   MotoMap = (function() {
     function MotoMap(domId) {
       this.onIdle = __bind(this.onIdle, this);      var opts;
@@ -49,6 +52,7 @@
     }
     MotoMap.prototype.onIdle = function() {
       var bounds, ne, sw;
+      busy(true);
       bounds = this.map.getBounds();
       sw = bounds.getSouthWest();
       ne = bounds.getNorthEast();
@@ -58,19 +62,18 @@
         neLat: ne.lat(),
         neLng: ne.lng()
       }, __bind(function(data) {
-        var id, marker, placemark, _i, _len, _ref, _results;
+        var id, marker, placemark, _i, _len, _ref;
         _ref = this.markers;
         for (id in _ref) {
           marker = _ref[id];
           marker.setMap(null);
         }
         this.markers = {};
-        _results = [];
         for (_i = 0, _len = data.length; _i < _len; _i++) {
           placemark = data[_i];
-          _results.push(this.createMarker(placemark));
+          this.createMarker(placemark);
         }
-        return _results;
+        return busy(false);
       }, this));
     };
     MotoMap.prototype.createMarker = function(placemark) {

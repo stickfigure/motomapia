@@ -23,6 +23,12 @@ body {
   -moz-border-radius-bottomleft: 5px;
   -webkit-border-bottom-left-radius: 5px; }
 
+#busyBox {
+  text-align: right; }
+
+#busy {
+  visibility: hidden; }
+
 #map {
   width: 100%;
   height: 100%; }

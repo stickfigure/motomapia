@@ -3,6 +3,7 @@
 
 package com.motomapia.util;
 
+import com.beoui.geocell.model.Point;
 import com.google.appengine.api.datastore.GeoPt;
 
 /**
@@ -12,6 +13,22 @@ import com.google.appengine.api.datastore.GeoPt;
  */
 public class GeoUtils 
 {
+	/**
+	 * Convert to the geocell version
+	 */
+	public static Point toPoint(GeoPt geoPt)
+	{
+		return new Point(geoPt.getLatitude(), geoPt.getLongitude());
+	}
+	
+	/**
+	 * Convert to the google version
+	 */
+	public static GeoPt toGeoPt(Point point)
+	{
+		return new GeoPt((float)point.getLat(), (float)point.getLon());
+	}
+	
 	/**
 	 * Get the normal (unsigned) area of a polygon.
 	 * 

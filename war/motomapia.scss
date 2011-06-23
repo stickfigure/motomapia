@@ -29,6 +29,9 @@ body {
 	@include border-radius-bottom(5px) 
 }
 
+#busyBox { text-align: right; }
+#busy { visibility: hidden; }
+
 #map {
 	width: 100%;
 	height: 100%;

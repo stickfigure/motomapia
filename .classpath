@@ -15,5 +15,8 @@
 	<classpathentry kind="lib" path="build-only/lombok-edge.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/objectify.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/jackson-jaxrs-1.8.2.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/geocell-0.0.8-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/javacsv.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/commons-lang-2.6.jar"/>
 	<classpathentry kind="output" path="war/WEB-INF/classes"/>
 </classpath>

@@ -38,6 +38,12 @@ decodePolyline = `function(encoded) {
 }`
 
 #
+# Set the little ajax busy loading indicator visible or not
+#
+busy = (x) ->
+	$('#busy').css('visibility', if x then 'visible' else 'hidden') 
+
+#
 # The bulk of our code is this class
 #
 class MotoMap
@@ -56,6 +62,7 @@ class MotoMap
 	# After bounds are done changing, redraw all the wikimapia places	
 	#
 	onIdle: =>
+		busy(on)
 		bounds = @map.getBounds()
 		sw = bounds.getSouthWest()
 		ne = bounds.getNorthEast()
@@ -63,6 +70,7 @@ class MotoMap
 			marker.setMap(null) for id, marker of @markers
 			@markers = {}
 			@createMarker(placemark) for placemark in data
+			busy(off)
 
 	# Add a marker to our map
 	#
