@@ -31,7 +31,7 @@ public class Places
 	private final static Logger log = LoggerFactory.getLogger(Places.class);
 	
 	/** How many (max) places to fetch in a single call */
-	public static final int PLACES_TO_FETCH = 200;
+	public static final int PLACES_TO_FETCH = 100;
 	
 	/**
 	 */
@@ -51,7 +51,7 @@ public class Places
 		List<Placemark> marks = new ArrayList<Placemark>(wikis.size());
 
 		for (WikiPlace wiki: wikis)
-			marks.add(new Placemark(wiki.getCenter(), wiki.getName(), wiki.getId(), wiki.getPolyline(), wiki.getPolygon().length, wiki.getArea()));
+			marks.add(new Placemark(wiki.getId(), wiki.getName(), wiki.getCenter(), wiki.getPolyline(), wiki.getPolygon().length, wiki.getArea()));
 		
 		return marks;
 	}

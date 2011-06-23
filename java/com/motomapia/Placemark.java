@@ -2,6 +2,10 @@
  */
 package com.motomapia;
 
+import java.io.Serializable;
+
+import lombok.Data;
+
 import com.google.appengine.api.datastore.GeoPt;
 
 /**
@@ -9,50 +13,40 @@ import com.google.appengine.api.datastore.GeoPt;
  * 
  * @author Jeff Schnitzer <jeff@infohazard.org>
  */
-public class Placemark extends Mark
+@Data
+public class Placemark implements Serializable
 {
 	private static final long serialVersionUID = 1L;
 	
 	/** */
-	long placeId;
-	public long getPlaceId() { return this.placeId; }
+	long id;
+	
+	/** */
+	String name;
+
+	/** Calculated centerpoint */
+	GeoPt center;
 	
 	/** Encoded as polyline, doesn't include the first point at the end */
 	String polygon;
-	public String getPolygon() { return this.polygon; }
 	
 	/** Number of points in the polygon */
 	int pointCount;
-	public int getPointCount() { return this.pointCount; }
 	
 	/** */
 	double area;
-	public double getArea() { return this.area; }
 	
 	/** */
 	public Placemark() {}
 	
 	/** */
-	public Placemark(GeoPt coords, String name, long id, String polygon, int pointCount, double area)
+	public Placemark(long id, String name, GeoPt center, String polygon, int pointCount, double area)
 	{
-		super(coords, name);
-
-		this.placeId = id;
+		this.id = id;
+		this.name = name;
+		this.center = center;
 		this.polygon = polygon;
 		this.pointCount = pointCount;
 		this.area = area;
-	}
-
-	/** */
-	@Override
-	public String getUniqueId()
-	{
-		return this.getType() + "#" + this.getPlaceId();
-	}
-	
-	/** */
-	public String toString()
-	{
-		return super.toString() + "{polygon=" + this.polygon + "}";
 	}
 }
