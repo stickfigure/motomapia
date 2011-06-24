@@ -1,5 +1,5 @@
 (function() {
-  var MotoMap, busy, decodePolyline, download, mouseX, mouseY;
+  var MotoMap, decodePolyline, download, mouseX, mouseY, showBusy, showError;
   var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
   decodePolyline = function(encoded) {	
 	var len = encoded.length;
@@ -35,8 +35,19 @@
 
 	return array;
 };
-  busy = function(x) {
-    return $('#busy').css('visibility', x ? 'visible' : 'hidden');
+  showBusy = function(x) {
+    if (x) {
+      return $('#busy').show();
+    } else {
+      return $('#busy').hide();
+    }
+  };
+  showError = function(x) {
+    if (x) {
+      return $('#error').show();
+    } else {
+      return $('#error').hide();
+    }
   };
   download = function(bounds) {
     var iframe, ne, sw, url;
@@ -90,10 +101,15 @@
       this.placeName = $('#placeName');
       google.maps.event.addListener(this.map, 'idle', this.onIdle);
       google.maps.event.addListener(this.map, 'maptypeid_changed', this.onMapTypeChange);
+      $(document).ajaxError(function() {
+        showBusy(false);
+        return showError(true);
+      });
     }
     MotoMap.prototype.onIdle = function() {
       var bounds, ne, sw;
-      busy(true);
+      showError(false);
+      showBusy(true);
       bounds = this.map.getBounds();
       sw = bounds.getSouthWest();
       ne = bounds.getNorthEast();
@@ -114,7 +130,7 @@
           placemark = data[_i];
           this.createMarker(placemark);
         }
-        return busy(false);
+        return showBusy(false);
       }, this));
     };
     MotoMap.prototype.onMapTypeChange = function() {
@@ -160,8 +176,13 @@
   $(function() {
     var motoMap;
     motoMap = new MotoMap("map");
-    return $('#download').click(function() {
+    $('#download').click(function() {
       return download(motoMap.map.getBounds());
+    });
+    return $('#instructionsLink').click(function() {
+      return $('#instructions').dialog({
+        width: 600
+      });
     });
   });
 }).call(this);

@@ -40,8 +40,10 @@ decodePolyline = `function(encoded) {
 #
 # Set the little ajax busy loading indicator visible or not
 #
-busy = (x) ->
-	$('#busy').css('visibility', if x then 'visible' else 'hidden')
+showBusy = (x) ->
+	if x then $('#busy').show() else $('#busy').hide()
+showError = (x) ->
+	if x then $('#error').show() else $('#error').hide()
 	
 #
 # Start a download
@@ -107,11 +109,16 @@ class MotoMap
 		
 		google.maps.event.addListener @map, 'idle', @onIdle
 		google.maps.event.addListener @map, 'maptypeid_changed', @onMapTypeChange
+		
+		$(document).ajaxError ->
+			showBusy(off)
+			showError(on)
 	
 	# After bounds are done changing, redraw all the wikimapia places	
 	# Note:  needs fat arrow because this is used as a callback
 	onIdle: =>
-		busy(on)
+		showError(off)
+		showBusy(on)
 		bounds = @map.getBounds()
 		sw = bounds.getSouthWest()
 		ne = bounds.getNorthEast()
@@ -119,7 +126,7 @@ class MotoMap
 			marker.setMap(null) for id, marker of @markers
 			@markers = {}
 			@createMarker(placemark) for placemark in data
-			busy(off)
+			showBusy(off)
 			
 	# When map type changes we need to change color of polygons
 	# Note:  needs fat arrow because this is used as a callback
@@ -161,3 +168,6 @@ $ ->
 	
 	$('#download').click ->
 		download(motoMap.map.getBounds())
+		
+	$('#instructionsLink').click ->
+		$('#instructions').dialog({ width: 600 })
