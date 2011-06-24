@@ -60,6 +60,7 @@ You can build and run your own version of Motomapia.
 
 * Create a Google App Engine application at the GAE website
 * Install Eclipse
+* Install [Project Lombok](http://projectlombok.org/) into Eclipse (run "java -jar build-only/lombok-edge.jar")
 * Install the Google Plugin for Eclipse
 * Install the Google App Engine SDK
 * Open the Motomapia project
