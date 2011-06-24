@@ -38,3 +38,16 @@ body {
 	height: 100%;
 }
 
+// This starts invisible, gets displayed and moved around when hovering over placemarks
+#placeName {
+	display: none;
+	position: fixed;
+	
+	color: #E8E6C1;
+	background-color: #c3390b;
+	border: 1px solid #380e00;
+	padding: 3px;
+	font-size: 0.8em;
+	margin-top: 20px;
+	margin-left: 20px;
+}

@@ -60,7 +60,16 @@ download = (bounds) ->
 		iframe.style.display = 'none';
 		document.body.appendChild(iframe);
 
-	iframe.src = url;   
+	iframe.src = url;
+	
+#
+# Tracks mouse movement in a variable
+#
+mouseX = null
+mouseY = null
+document.onmousemove = (e) ->
+	mouseX = e.clientX
+	mouseY = e.clientY
 
 #
 # The bulk of our code is this class
@@ -94,6 +103,7 @@ class MotoMap
 		
 		@map = new google.maps.Map(document.getElementById(domId), opts)
 		@markers = {}
+		@placeName = $('#placeName')
 		
 		google.maps.event.addListener @map, 'idle', @onIdle
 		google.maps.event.addListener @map, 'maptypeid_changed', @onMapTypeChange
@@ -132,10 +142,16 @@ class MotoMap
 		
 		google.maps.event.addListener poly, 'mouseover', =>
 			poly.setOptions(@hoverPolygonOpts)
+			@placeName.text(placemark.name)
+			@placeName.show()
 			
+		google.maps.event.addListener poly, 'mousemove', =>
+			@placeName.css('left', mouseX)
+			@placeName.css('top', mouseY)
+
 		google.maps.event.addListener poly, 'mouseout', =>
 			poly.setOptions(@currentPolygonOpts)
-			
+			@placeName.hide()
 
 #
 # Initialization

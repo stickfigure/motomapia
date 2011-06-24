@@ -1,5 +1,5 @@
 (function() {
-  var MotoMap, busy, decodePolyline, download;
+  var MotoMap, busy, decodePolyline, download, mouseX, mouseY;
   var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
   decodePolyline = function(encoded) {	
 	var len = encoded.length;
@@ -52,6 +52,12 @@
     }
     return iframe.src = url;
   };
+  mouseX = null;
+  mouseY = null;
+  document.onmousemove = function(e) {
+    mouseX = e.clientX;
+    return mouseY = e.clientY;
+  };
   MotoMap = (function() {
     MotoMap.prototype.roadmapPolygonOpts = {
       strokeWeight: 1,
@@ -81,6 +87,7 @@
       this.currentPolygonOpts = this.roadmapPolygonOpts;
       this.map = new google.maps.Map(document.getElementById(domId), opts);
       this.markers = {};
+      this.placeName = $('#placeName');
       google.maps.event.addListener(this.map, 'idle', this.onIdle);
       google.maps.event.addListener(this.map, 'maptypeid_changed', this.onMapTypeChange);
     }
@@ -135,10 +142,17 @@
       poly.setMap(this.map);
       this.markers[placemark.id] = poly;
       google.maps.event.addListener(poly, 'mouseover', __bind(function() {
-        return poly.setOptions(this.hoverPolygonOpts);
+        poly.setOptions(this.hoverPolygonOpts);
+        this.placeName.text(placemark.name);
+        return this.placeName.show();
+      }, this));
+      google.maps.event.addListener(poly, 'mousemove', __bind(function() {
+        this.placeName.css('left', mouseX);
+        return this.placeName.css('top', mouseY);
       }, this));
       return google.maps.event.addListener(poly, 'mouseout', __bind(function() {
-        return poly.setOptions(this.currentPolygonOpts);
+        poly.setOptions(this.currentPolygonOpts);
+        return this.placeName.hide();
       }, this));
     };
     return MotoMap;
