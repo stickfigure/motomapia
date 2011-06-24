@@ -67,16 +67,16 @@ download = (bounds) ->
 #
 class MotoMap
 	roadmapPolygonOpts:
-		strokeWeight: 0.8
+		strokeWeight: 1
 		strokeColor: '#646464'
 		fillColor: '#646464'
 		fillOpacity: 0.2
 		
 	satellitePolygonOpts:
-		strokeWeight: 0.8
-		strokeColor: '#646464'
-		fillColor: '#646464'
-		fillOpacity: 0.2
+		strokeWeight: 1
+		strokeColor: '#ffffff'
+		fillColor: '#ffffff'
+		fillOpacity: 0.3
 	
 	hoverPolygonOpts:
 		strokeWeight: 0.6
@@ -96,6 +96,7 @@ class MotoMap
 		@markers = {}
 		
 		google.maps.event.addListener @map, 'idle', @onIdle
+		google.maps.event.addListener @map, 'maptypeid_changed', @onMapTypeChange
 	
 	# After bounds are done changing, redraw all the wikimapia places	
 	# Note:  needs fat arrow because this is used as a callback
@@ -109,6 +110,17 @@ class MotoMap
 			@markers = {}
 			@createMarker(placemark) for placemark in data
 			busy(off)
+			
+	# When map type changes we need to change color of polygons
+	# Note:  needs fat arrow because this is used as a callback
+	onMapTypeChange: =>
+		switch @map.getMapTypeId()
+			when google.maps.MapTypeId.ROADMAP, google.maps.MapTypeId.TERRAIN
+				@currentPolygonOpts = @roadmapPolygonOpts
+			else
+				@currentPolygonOpts = @satellitePolygonOpts
+		
+		marker.setOptions(@currentPolygonOpts) for id, marker of @markers
 
 	# Add a marker to our map
 	#

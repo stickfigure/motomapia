@@ -54,16 +54,16 @@
   };
   MotoMap = (function() {
     MotoMap.prototype.roadmapPolygonOpts = {
-      strokeWeight: 0.8,
+      strokeWeight: 1,
       strokeColor: '#646464',
       fillColor: '#646464',
       fillOpacity: 0.2
     };
     MotoMap.prototype.satellitePolygonOpts = {
-      strokeWeight: 0.8,
-      strokeColor: '#646464',
-      fillColor: '#646464',
-      fillOpacity: 0.2
+      strokeWeight: 1,
+      strokeColor: '#ffffff',
+      fillColor: '#ffffff',
+      fillOpacity: 0.3
     };
     MotoMap.prototype.hoverPolygonOpts = {
       strokeWeight: 0.6,
@@ -71,6 +71,7 @@
       fillOpacity: 0.5
     };
     function MotoMap(domId) {
+      this.onMapTypeChange = __bind(this.onMapTypeChange, this);
       this.onIdle = __bind(this.onIdle, this);      var opts;
       opts = {
         zoom: 8,
@@ -81,6 +82,7 @@
       this.map = new google.maps.Map(document.getElementById(domId), opts);
       this.markers = {};
       google.maps.event.addListener(this.map, 'idle', this.onIdle);
+      google.maps.event.addListener(this.map, 'maptypeid_changed', this.onMapTypeChange);
     }
     MotoMap.prototype.onIdle = function() {
       var bounds, ne, sw;
@@ -107,6 +109,24 @@
         }
         return busy(false);
       }, this));
+    };
+    MotoMap.prototype.onMapTypeChange = function() {
+      var id, marker, _ref, _results;
+      switch (this.map.getMapTypeId()) {
+        case google.maps.MapTypeId.ROADMAP:
+        case google.maps.MapTypeId.TERRAIN:
+          this.currentPolygonOpts = this.roadmapPolygonOpts;
+          break;
+        default:
+          this.currentPolygonOpts = this.satellitePolygonOpts;
+      }
+      _ref = this.markers;
+      _results = [];
+      for (id in _ref) {
+        marker = _ref[id];
+        _results.push(marker.setOptions(this.currentPolygonOpts));
+      }
+      return _results;
     };
     MotoMap.prototype.createMarker = function(placemark) {
       var poly;
