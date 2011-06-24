@@ -55,8 +55,8 @@
   MotoMap = (function() {
     MotoMap.prototype.roadmapPolygonOpts = {
       strokeWeight: 1,
-      strokeColor: '#646464',
-      fillColor: '#646464',
+      strokeColor: '#000000',
+      fillColor: '#000000',
       fillOpacity: 0.2
     };
     MotoMap.prototype.satellitePolygonOpts = {
