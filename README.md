@@ -3,7 +3,7 @@
 Motomapia is a website that lets you download Wikimapia placemarks to your GPS as POI files.  It
 is also an opensource project demonstrating a handful of web technologies.
 
-You can visit this code in operation at http://www.motomapia.org/
+You can visit this code in operation at http://www.motomapia.com/
 
 ## Technology
 
@@ -65,3 +65,7 @@ You can build and run your own version of Motomapia.
 * Open the Motomapia project
 * Edit war/WEB-INF/appengine-web.xml and replace *motomapia* with your application id
 * Click the deploy button in Eclipse
+
+## Help
+
+The most likely place to ask for help is the [Objectify-Appengine group](http://groups.google.com/group/objectify-appengine).
