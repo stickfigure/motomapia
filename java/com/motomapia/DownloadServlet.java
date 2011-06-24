@@ -16,7 +16,6 @@ import org.slf4j.LoggerFactory;
 
 import com.beoui.geocell.GeocellManager;
 import com.beoui.geocell.model.BoundingBox;
-import com.beoui.geocell.model.CostFunction;
 import com.csvreader.CsvWriter;
 import com.motomapia.entity.DAO;
 import com.motomapia.entity.Place;
@@ -48,17 +47,21 @@ public class DownloadServlet extends HttpServlet
 			log.debug("Downloading box " + swLat + "," + swLng + " -- " + neLat + "," + neLng);
 		
 		BoundingBox bb = new BoundingBox(neLat, neLng, swLat, swLng);
+
+		// The cost function causes it to never return
+//		List<String> cells = GeocellManager.bestBboxSearchCells(bb, new CostFunction() {
+//			@Override
+//			public double defaultCostFunction(int numCells, int resolution)
+//			{
+//				// Here we ensure that we do not try to query more than 30 cells, the limit of a gae IN filter
+//				return numCells > 30 ? Double.MAX_VALUE : 0;
+//			}
+//		});
 		
-		List<String> cells = GeocellManager.bestBboxSearchCells(bb, new CostFunction() {
-			@Override
-			public double defaultCostFunction(int numCells, int resolution)
-			{
-				// Here we ensure that we do not try to query more than 30 cells, the limit of a gae IN filter
-				return numCells > 30 ? Double.MAX_VALUE : 0;
-			}
-		});
+		List<String> cells = GeocellManager.bestBboxSearchCells(bb, null);
 		
 		resp.setContentType("text/csv");
+		resp.setHeader("Content-Disposition", "attachment; filename=poi.csv");
 		CsvWriter writer = new CsvWriter(resp.getWriter(), ',');
 		
 		int count = 0;

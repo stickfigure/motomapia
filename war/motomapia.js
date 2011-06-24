@@ -1,5 +1,5 @@
 (function() {
-  var MotoMap, busy, decodePolyline;
+  var MotoMap, busy, decodePolyline, download;
   var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
   decodePolyline = function(encoded) {	
 	var len = encoded.length;
@@ -38,7 +38,38 @@
   busy = function(x) {
     return $('#busy').css('visibility', x ? 'visible' : 'hidden');
   };
+  download = function(bounds) {
+    var iframe, ne, sw, url;
+    sw = bounds.getSouthWest();
+    ne = bounds.getNorthEast();
+    url = '/download/poi.csv?swLat=' + sw.lat() + '&swLng=' + sw.lng() + '&neLat=' + ne.lat() + '&neLng=' + ne.lng();
+    iframe = document.getElementById('downloader');
+    if (iframe === null) {
+      iframe = document.createElement('iframe');
+      iframe.id = 'downloader';
+      iframe.style.display = 'none';
+      document.body.appendChild(iframe);
+    }
+    return iframe.src = url;
+  };
   MotoMap = (function() {
+    MotoMap.prototype.roadmapPolygonOpts = {
+      strokeWeight: 0.8,
+      strokeColor: '#646464',
+      fillColor: '#646464',
+      fillOpacity: 0.2
+    };
+    MotoMap.prototype.satellitePolygonOpts = {
+      strokeWeight: 0.8,
+      strokeColor: '#646464',
+      fillColor: '#646464',
+      fillOpacity: 0.2
+    };
+    MotoMap.prototype.hoverPolygonOpts = {
+      strokeWeight: 0.6,
+      fillColor: '#ffd700',
+      fillOpacity: 0.5
+    };
     function MotoMap(domId) {
       this.onIdle = __bind(this.onIdle, this);      var opts;
       opts = {
@@ -46,6 +77,7 @@
         center: new google.maps.LatLng(37, -122),
         mapTypeId: google.maps.MapTypeId.ROADMAP
       };
+      this.currentPolygonOpts = this.roadmapPolygonOpts;
       this.map = new google.maps.Map(document.getElementById(domId), opts);
       this.markers = {};
       google.maps.event.addListener(this.map, 'idle', this.onIdle);
@@ -78,16 +110,24 @@
     };
     MotoMap.prototype.createMarker = function(placemark) {
       var poly;
-      poly = new google.maps.Polygon({
-        paths: decodePolyline(placemark.polygon),
-        strokeWeight: 1
-      });
+      poly = new google.maps.Polygon(this.currentPolygonOpts);
+      poly.setPath(decodePolyline(placemark.polygon));
       poly.setMap(this.map);
-      return this.markers[placemark.id] = poly;
+      this.markers[placemark.id] = poly;
+      google.maps.event.addListener(poly, 'mouseover', __bind(function() {
+        return poly.setOptions(this.hoverPolygonOpts);
+      }, this));
+      return google.maps.event.addListener(poly, 'mouseout', __bind(function() {
+        return poly.setOptions(this.currentPolygonOpts);
+      }, this));
     };
     return MotoMap;
   })();
   $(function() {
-    return new MotoMap("map");
+    var motoMap;
+    motoMap = new MotoMap("map");
+    return $('#download').click(function() {
+      return download(motoMap.map.getBounds());
+    });
   });
 }).call(this);
