@@ -70,7 +70,8 @@ public class DownloadServlet extends HttpServlet
 		{
 			writer.write("" + place.getCenter().getLatitude());
 			writer.write("" + place.getCenter().getLongitude());
-			writer.write(place.getName());
+			String name = (place.getName() == null || place.getName().trim().length() == 0) ? "Unknown" : place.getName();
+			writer.write(name);
 			writer.endRecord();
 			count++;
 		}
