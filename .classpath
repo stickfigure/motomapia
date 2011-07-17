@@ -12,11 +12,11 @@
 	<classpathentry kind="lib" path="war/WEB-INF/lib/javassist-3.8.0.GA.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/slf4j-api-1.6.1.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/slf4j-jdk14-1.6.1.jar"/>
-	<classpathentry kind="lib" path="build-only/lombok-edge.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/objectify.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/jackson-jaxrs-1.8.2.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/geocell-0.0.8-SNAPSHOT.jar" sourcepath="/geocell/src/main/java"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/javacsv.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/commons-lang-2.6.jar"/>
+	<classpathentry kind="lib" path="build-only/lombok.jar"/>
 	<classpathentry kind="output" path="war/WEB-INF/classes"/>
 </classpath>

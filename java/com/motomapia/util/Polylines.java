@@ -30,7 +30,7 @@ public class Polylines
 
 		int plat = 0;
 		int plng = 0;
-		int counter = 0;
+		//int counter = 0;
 
 		int listSize = track.length;
 
@@ -38,7 +38,7 @@ public class Polylines
 
 		for (int i = 0; i < listSize; i++)
 		{
-			counter++;
+			//counter++;
 			trackpoint = track[i];
 
 			int late5 = floor1e5(trackpoint.getLatitude());
