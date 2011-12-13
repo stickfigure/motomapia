@@ -7,9 +7,6 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -19,9 +16,10 @@ import org.slf4j.LoggerFactory;
 
 import com.beoui.geocell.GeocellManager;
 import com.google.appengine.api.datastore.GeoPt;
-import com.googlecode.objectify.annotation.Cached;
-import com.googlecode.objectify.annotation.Indexed;
-import com.googlecode.objectify.annotation.Unindexed;
+import com.googlecode.objectify.annotation.Cache;
+import com.googlecode.objectify.annotation.Entity;
+import com.googlecode.objectify.annotation.Id;
+import com.googlecode.objectify.annotation.Index;
 import com.motomapia.util.GeoUtils;
 import com.motomapia.util.Utils;
 import com.motomapia.wikimapia.WikiPlace;
@@ -32,10 +30,9 @@ import com.motomapia.wikimapia.WikiPlace;
  * 
  * @author Jeff Schnitzer
  */
-@Cached
-@Unindexed
-@ToString
 @Entity(name="P")
+@Cache
+@ToString
 public class Place implements Serializable
 {
 	private static final long serialVersionUID = 1L;
@@ -49,7 +46,7 @@ public class Place implements Serializable
 	@Getter long id;
 
 	/** When this record was created or updated */
-	@Indexed
+	@Index
 	@Getter Date updated;
 
 	/** Textual name in Wikimapia */
@@ -68,7 +65,7 @@ public class Place implements Serializable
 	@Getter @Setter double area;
 	
 	/** A list of geohashed cells, suitable for queries */
-	@Indexed
+	@Index
 	@Getter List<String> cells;
 	
 	/** GAE & Objectify want this */

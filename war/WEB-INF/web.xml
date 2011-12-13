@@ -5,31 +5,22 @@
 	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
 	http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
 
-	<context-param>
-		<param-name>resteasy.scan.resources</param-name>
-		<param-value>true</param-value>
-	</context-param>
-	<context-param>
-		<param-name>resteasy.servlet.mapping.prefix</param-name>
-		<param-value>/api</param-value>
-	</context-param>
-	<servlet>
-		<servlet-name>Resteasy</servlet-name>
-		<servlet-class>org.jboss.resteasy.plugins.server.servlet.HttpServletDispatcher</servlet-class>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>Resteasy</servlet-name>
-		<url-pattern>/api/*</url-pattern>
-	</servlet-mapping>
+	<listener>
+		<listener-class>com.motomapia.GuiceConfig</listener-class>
+	</listener>
 
-	<servlet>
-		<servlet-name>Download</servlet-name>
-		<servlet-class>com.motomapia.DownloadServlet</servlet-class>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>Download</servlet-name>
-		<url-pattern>/download/*</url-pattern>
-	</servlet-mapping>
+	<!-- GUICE -->
+	<filter>
+		<filter-name>GuiceFilter</filter-name>
+		<filter-class>com.google.inject.servlet.GuiceFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>GuiceFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+		<dispatcher>REQUEST</dispatcher>
+		<dispatcher>FORWARD</dispatcher>
+		<dispatcher>INCLUDE</dispatcher>
+	</filter-mapping>
 
 	<welcome-file-list>
 		<welcome-file>index.html</welcome-file>

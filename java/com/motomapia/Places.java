@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import javax.inject.Inject;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -17,7 +18,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.appengine.api.datastore.GeoPt;
-import com.motomapia.entity.DAO;
 import com.motomapia.entity.Place;
 import com.motomapia.wikimapia.WikiPlace;
 import com.motomapia.wikimapia.Wikimapia;
@@ -37,7 +37,7 @@ public class Places
 	public static final int PLACES_TO_FETCH = 100;
 	
 	/** */
-	DAO dao = new DAO();
+	@Inject Ofy ofy;
 	
 	/**
 	 * This method fetches places from Wikimapia, syncs them into our datastore, and returns placemarks to the client.
@@ -75,7 +75,7 @@ public class Places
 		for (WikiPlace wikiPlace: wikiPlaces)
 			placeIds.add(wikiPlace.getId());
 		
-		Map<Long, Place> places = dao.ofy().get(Place.class, placeIds);
+		Map<Long, Place> places = ofy.load().type(Place.class).ids(placeIds);
 
 		// Now we can process all the wiki places, looking for any changes or corrections
 		List<Place> needUpdating = new ArrayList<Place>();
@@ -102,7 +102,7 @@ public class Places
 			if (log.isInfoEnabled())
 				log.info("Updating: " + needUpdating);
 			
-			dao.ofy().put(needUpdating);
+			ofy.save().entities(needUpdating);	// async
 		}
 	}
 

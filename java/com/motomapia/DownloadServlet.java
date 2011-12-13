@@ -6,6 +6,9 @@ package com.motomapia;
 import java.io.IOException;
 import java.util.List;
 
+import javax.inject.Inject;
+import javax.inject.Provider;
+import javax.inject.Singleton;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -17,20 +20,24 @@ import org.slf4j.LoggerFactory;
 import com.beoui.geocell.GeocellManager;
 import com.beoui.geocell.model.BoundingBox;
 import com.csvreader.CsvWriter;
-import com.motomapia.entity.DAO;
 import com.motomapia.entity.Place;
 
 /**
- * Downloads all the places in a bounding box as a POI csv file.
+ * Downloads all the places in a bounding box as a POI csv file.  This is an example of a plain
+ * servlet with Guice, not using Resteasy.
  * 
  * @author Jeff Schnitzer
  */
+@Singleton
 public class DownloadServlet extends HttpServlet
 {
 	private static final long serialVersionUID = 1L;
 	
 	/** */
 	private final static Logger log = LoggerFactory.getLogger(DownloadServlet.class);
+	
+	/** */
+	@Inject Provider<Ofy> ofyProvider;
 
 	/* (non-Javadoc)
 	 * @see javax.servlet.http.HttpServlet#service(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
@@ -64,9 +71,10 @@ public class DownloadServlet extends HttpServlet
 		resp.setHeader("Content-Disposition", "attachment; filename=poi.csv");
 		CsvWriter writer = new CsvWriter(resp.getWriter(), ',');
 		
+		Ofy ofy = ofyProvider.get();
 		int count = 0;
-		DAO dao = new DAO();
-		for (Place place: dao.ofy().query(Place.class).filter("cells in", cells))
+		
+		for (Place place: ofy.load().type(Place.class).filter("cells in", cells))
 		{
 			writer.write("" + place.getCenter().getLatitude());
 			writer.write("" + place.getCenter().getLongitude());
