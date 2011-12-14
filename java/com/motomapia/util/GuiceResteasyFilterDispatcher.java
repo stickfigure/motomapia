@@ -10,6 +10,8 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.ws.rs.ext.Provider;
 
+import lombok.extern.slf4j.Slf4j;
+
 import org.jboss.resteasy.plugins.guice.GuiceResourceFactory;
 import org.jboss.resteasy.plugins.server.servlet.FilterDispatcher;
 import org.jboss.resteasy.spi.Registry;
@@ -33,7 +35,7 @@ import com.google.inject.Singleton;
  * @author Jeff Schnitzer
  */
 @Singleton
-//@Slf4j
+@Slf4j
 public class GuiceResteasyFilterDispatcher extends FilterDispatcher
 {
 	@Inject Injector injector;
@@ -60,12 +62,12 @@ public class GuiceResteasyFilterDispatcher extends FilterDispatcher
 				if (GetRestful.isRootResource(beanClass))
 				{
 					final ResourceFactory resourceFactory = new GuiceResourceFactory(binding.getProvider(), beanClass);
-					//log.info("registering factory for {}", beanClass.getName());
+					log.info("registering factory for {}", beanClass.getName());
 					registry.addResourceFactory(resourceFactory);
 				}
 				if (beanClass.isAnnotationPresent(Provider.class))
 				{
-					//log.info("registering provider instance for {}", beanClass.getName());
+					log.info("registering provider instance for {}", beanClass.getName());
 					providerFactory.registerProviderInstance(binding.getProvider().get());
 				}
 			}

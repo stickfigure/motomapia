@@ -27,7 +27,7 @@ import com.motomapia.wikimapia.Wikimapia;
  * 
  * @author Jeff Schnitzer
  */
-@Path("/places")
+@Path("/api/places")
 public class Places
 {
 	/** */
