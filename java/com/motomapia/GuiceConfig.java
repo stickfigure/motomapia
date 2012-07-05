@@ -11,11 +11,10 @@ import lombok.extern.slf4j.Slf4j;
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
-import com.google.inject.Provides;
 import com.google.inject.servlet.GuiceServletContextListener;
-import com.google.inject.servlet.RequestScoped;
 import com.google.inject.servlet.ServletModule;
 import com.googlecode.objectify.cache.AsyncCacheFilter;
+import com.googlecode.objectify.x.ObjectifyService;
 import com.motomapia.util.GuiceResteasyFilterDispatcher;
 
 
@@ -54,12 +53,6 @@ public class GuiceConfig extends GuiceServletContextListener
 
 			bind(Places.class);
 		}
-
-		/** */
-		@Provides @RequestScoped
-		Ofy provideOfy(OfyFactory fact) {
-			return fact.begin();
-		}
 	}
 
 	/**
@@ -81,6 +74,11 @@ public class GuiceConfig extends GuiceServletContextListener
 	@Override
 	protected Injector getInjector() {
 		Injector inj = Guice.createInjector(new MotomapiaServletModule(), new MotompaiaModule());
+		
+		// Here we set up the OfyFactory that will replace the standard ObjectifyFactory
+		OfyFactory fact = inj.getInstance(OfyFactory.class);
+		ObjectifyService.setFactory(fact);
+		
 		return inj;
 	}
 

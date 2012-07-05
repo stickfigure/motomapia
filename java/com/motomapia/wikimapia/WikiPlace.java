@@ -7,6 +7,7 @@ import java.util.Set;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import org.codehaus.jackson.JsonNode;
 
@@ -21,6 +22,7 @@ import com.motomapia.util.Polylines;
  */
 @Data
 @EqualsAndHashCode(of="id")
+@ToString(of={"id", "name"})
 public class WikiPlace implements Serializable, Comparable<WikiPlace>
 {
 	private static final long serialVersionUID = 1L;

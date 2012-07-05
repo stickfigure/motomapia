@@ -18,6 +18,12 @@
 	<property name="lib.buildonly.dir" location="build-only" />
 	<property name="classes.dir" location="${war.dir}/WEB-INF/classes" />
 
+	<property name="build.dir" location="target" />
+	<property name="staging.dir" location="${build.dir}/staging" />
+	
+	<property name="appengine.sdk.dir" location="../appengine-java-sdk" />
+	<import file="${appengine.sdk.dir}/config/user/ant-macros.xml" />
+	
 	<target name="update-htmleasy" depends="">
 		<copy file="${m2.dir}/com/googlecode/htmleasy/htmleasy/0.7-SNAPSHOT/htmleasy-0.7-SNAPSHOT.jar" todir="${lib.dir}" />
 	</target>
@@ -27,11 +33,51 @@
 			<fileset dir="../objectify/target">
 				<include name="objectify-*.jar" />
 			</fileset>
-			<regexpmapper from="objectify-[0-9]*.jar" to="objectify.jar" />
+			<regexpmapper from="objectify-SNAPSHOT*.jar" to="objectify.jar" />
 		</copy>
 	</target>
 	
 	<target name="update-unsuck" depends="">
 		<copy file="../unsuck/target/unsuck.jar" todir="${lib.dir}" />
+	</target>
+
+	<target name="auth">
+		<java classname="com.google.appengine.tools.admin.AppCfg" inputstring="${appengine.pass}">
+			<sysproperty key="appengine.sdk.root" value="${appengine.sdk.dir}" />
+			<classpath>
+				<fileset dir="${appengine.sdk.dir}/lib" includes="**/*.jar" />
+			</classpath>
+			<arg value="--email=${appengine.email}" />
+			<arg value="resource_limits_info" />
+			<arg value="war" />
+		</java>
+	</target>
+
+	<!-- see https://developers.google.com/appengine/docs/java/tools/ant -->
+	<target name="run">
+		<dev_appserver war="war" port="8888">
+			<options>
+				<arg value="--address=0.0.0.0"/>
+				<arg value="--disable_update_check"/>
+				<arg value="--jvm_flag=-Xmx1G"/>
+				<arg value="--jvm_flag=-Djava.awt.headless=true"/>
+				<arg value="--jvm_flag=-Ddatastore.default_high_rep_job_policy_unapplied_job_pct=1"/>
+			</options>
+		</dev_appserver>
+	</target>
+
+	<target name="deploy">
+		<delete dir="${staging.dir}" />
+		<mkdir dir="${staging.dir}" />
+
+		<copy todir="${staging.dir}">
+			<fileset dir="war">
+				<exclude name="WEB-INF/classes/**" />
+				<exclude name="WEB-INF/appengine-generated/**" />
+			</fileset>
+		</copy>
+		<jar destfile="${staging.dir}/WEB-INF/lib/classes.jar" basedir="${classes.dir}" />
+
+		<appcfg action="update" war="${staging.dir}" />
 	</target>
 </project>

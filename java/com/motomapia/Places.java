@@ -5,9 +5,7 @@ package com.motomapia;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
-import javax.inject.Inject;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -18,7 +16,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.appengine.api.datastore.GeoPt;
-import com.motomapia.entity.Place;
+import com.google.common.base.Function;
+import com.google.common.collect.Lists;
 import com.motomapia.wikimapia.WikiPlace;
 import com.motomapia.wikimapia.Wikimapia;
 
@@ -35,9 +34,6 @@ public class Places
 	
 	/** How many (max) places to fetch in a single call */
 	public static final int PLACES_TO_FETCH = 100;
-	
-	/** */
-	@Inject Ofy ofy;
 	
 	/**
 	 * This method fetches places from Wikimapia, syncs them into our datastore, and returns placemarks to the client.
@@ -66,44 +62,17 @@ public class Places
 	}
 
 	/**
-	 * Ensures that we have correct Place objects in our database.
+	 * Ensures that we have correct Place objects in our database.  Just enqueues a bunch of sync tasks so we
+	 * don't have to slow down the UX.
 	 */
 	private void syncPlaces(List<WikiPlace> wikiPlaces)
 	{
-		// First get all the relevant Place entities
-		List<Long> placeIds = new ArrayList<Long>(wikiPlaces.size());
-		for (WikiPlace wikiPlace: wikiPlaces)
-			placeIds.add(wikiPlace.getId());
-		
-		Map<Long, Place> places = ofy.load().type(Place.class).ids(placeIds);
-
-		// Now we can process all the wiki places, looking for any changes or corrections
-		List<Place> needUpdating = new ArrayList<Place>();
-
-		for (WikiPlace wikiPlace: wikiPlaces)
-		{
-			Place place = places.get(wikiPlace.getId());
-			
-			if (place == null)
-			{
-				needUpdating.add(new Place(wikiPlace));
+		Queues.sync().add(Lists.transform(wikiPlaces, new Function<WikiPlace, SyncPlaceTask>() {
+			@Override
+			public SyncPlaceTask apply(WikiPlace wikiPlace) {
+				return new SyncPlaceTask(wikiPlace);
 			}
-			else
-			{
-				// Check the Place object, make sure it is correct
-				if (place.updateFrom(wikiPlace))
-					needUpdating.add(place);
-			}
-		}
-
-		// Save any new places or places that have changed
-		if (!needUpdating.isEmpty())
-		{
-			if (log.isInfoEnabled())
-				log.info("Updating: " + needUpdating);
-			
-			ofy.save().entities(needUpdating);	// async
-		}
+		}));
 	}
 
 }

@@ -3,11 +3,11 @@
 
 package com.motomapia;
 
+import static com.motomapia.OfyService.ofy;
+
 import java.io.IOException;
 import java.util.List;
 
-import javax.inject.Inject;
-import javax.inject.Provider;
 import javax.inject.Singleton;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -36,9 +36,6 @@ public class DownloadServlet extends HttpServlet
 	/** */
 	private final static Logger log = LoggerFactory.getLogger(DownloadServlet.class);
 	
-	/** */
-	@Inject Provider<Ofy> ofyProvider;
-
 	/* (non-Javadoc)
 	 * @see javax.servlet.http.HttpServlet#service(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
 	 */
@@ -71,10 +68,9 @@ public class DownloadServlet extends HttpServlet
 		resp.setHeader("Content-Disposition", "attachment; filename=poi.csv");
 		CsvWriter writer = new CsvWriter(resp.getWriter(), ',');
 		
-		Ofy ofy = ofyProvider.get();
 		int count = 0;
 		
-		for (Place place: ofy.load().type(Place.class).filter("cells in", cells))
+		for (Place place: ofy().load().type(Place.class).filter("cells in", cells))
 		{
 			writer.write("" + place.getCenter().getLatitude());
 			writer.write("" + place.getCenter().getLongitude());

@@ -3,12 +3,10 @@
 
 package com.motomapia;
 
-import java.util.Map;
-
-import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Objectify;
 import com.googlecode.objectify.TxnWork;
 import com.googlecode.objectify.util.cmd.ObjectifyWrapper;
+import com.googlecode.objectify.x.ObjectifyService;
 
 /**
  * Our basic data access interface.  Extends the basic Objectify interface to add our custom logic.
@@ -18,19 +16,31 @@ import com.googlecode.objectify.util.cmd.ObjectifyWrapper;
 public class Ofy extends ObjectifyWrapper<Ofy, OfyFactory>
 {
 	/**
-	 * A Work interface you can use with Ofy.
+	 * This is a temporary workaround to handle push() and pop() without impacting the objectify core.
 	 */
-	public interface Work<R> extends TxnWork<Ofy, R> {}
+	abstract public static class Work<R> implements TxnWork<Ofy, R> {
+		@Override
+		final public R run(Ofy ofy) {
+			try {
+				ObjectifyService.push(ofy);
+				return run();
+			} finally {
+				ObjectifyService.pop();
+			}
+		}
+
+		abstract public R run();
+	}
 
 	/** Work which doesn't require returning a value */
-	public static abstract class VoidWork implements Work<Void> {
+	abstract public static class VoidWork extends Work<Void> {
 		@Override
-		public Void run(Ofy ofy) {
-			this.vrun(ofy);
+		final public Void run() {
+			this.vrun();
 			return null;
 		}
 
-		abstract public void vrun(Ofy ofy);
+		abstract public void vrun();
 	}
 
 	/** */
@@ -41,60 +51,5 @@ public class Ofy extends ObjectifyWrapper<Ofy, OfyFactory>
 	/** Shortcut */
 	public OfyFactory fact() {
 		return this.getFactory();
-	}
-
-	/** Convenience method */
-	public <T> T load(Key<T> key) {
-		return load().key(key).get();
-	}
-
-	/** Convenience method */
-	public <T> T load(Class<T> clazz, long id) {
-		return load().type(clazz).id(id).get();
-	}
-
-	/** Convenience method */
-	public <T> T load(Class<T> clazz, String id) {
-		return load().type(clazz).id(id).get();
-	}
-
-	/** Convenience method */
-	public <T> T loadSafe(Key<T> key) {
-		return load().key(key).safe();
-	}
-
-	/** Convenience method */
-	public <T> T loadSafe(Class<T> clazz, long id) {
-		return load().type(clazz).id(id).safe();
-	}
-
-	/** Convenience method */
-	public <T> T loadSafe(Class<T> clazz, String id) {
-		return load().type(clazz).id(id).safe();
-	}
-
-	/** Convenience method */
-	public <T> Key<T> save(T entity) {
-		return save().entity(entity).now();
-	}
-
-	/** Convenience method */
-	public <K, E extends K> Map<Key<K>, E> save(E... entities) {
-		return save().<K, E>entities(entities).now();
-	}
-
-	/** Convenience method */
-	public <K, E extends K> Map<Key<K>, E> save(Iterable<E> entities) {
-		return save().<K, E>entities(entities).now();
-	}
-
-	/** Convenience method */
-	public void delete(Object... keysOrEntities) {
-		delete().keys(keysOrEntities).now();
-	}
-
-	/** Convenience method */
-	public void delete(Iterable<?> keysOrEntities) {
-		delete().keys(keysOrEntities).now();
 	}
 }
