@@ -80,20 +80,32 @@
 		<jar destfile="${staging.dir}/WEB-INF/lib/classes.jar" basedir="${classes.dir}" />
 
 		<!-- Run the optimizer -->
-		<apply executable="r.js" dir="war" dest="${staging.dir}" relative="true">
+		<!-- Ant is truly hopeless
+		<apply executable="r.js" dir="war/js" dest="${staging.dir}" relative="true">
 			<arg value="-o"/> 
-			<srcfile prefix="name=js/app/"/> 
-			<targetfile prefix="out=../target/staging/js/app/"/> 
-			<arg value="baseUrl=."/>
-			<!--
-			--> 
+			<srcfile prefix="name=app/"/> 
+			<targetfile prefix="out=../../target/staging/js/app/"/> 
+			<arg value="baseUrl=js"/>
 			
-			<fileset dir="war/js/app" casesensitive="yes">
+			<fileset dir="war/js/app/page" casesensitive="yes">
 				<include name="**/*.js"/>
 			</fileset>
+			
+			<mapper type="identity"/>
+		</apply>
+		--> 
+		<apply executable="../optimize.sh" dir="war" relative="true">
+			<srcfile/> 
+			
+			<fileset dir="war/js/app/page" casesensitive="yes">
+				<include name="**/*.js"/>
+			</fileset>
+			
 			<mapper type="flatten"/>
 		</apply>
 		
+		<!--
 		<appcfg action="update" war="${staging.dir}" />
+		--> 
 	</target>
 </project>
