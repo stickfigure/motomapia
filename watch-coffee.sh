@@ -1,3 +1,3 @@
 #!/bin/sh
 
-coffee --watch --compile war/*.coffee
+coffee --output war/js/app/ --watch --compile coffee/ 

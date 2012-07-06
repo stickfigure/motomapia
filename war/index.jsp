@@ -8,13 +8,13 @@
 		
 		<title>Motomapia - download Wikimapia to your GPS</title>
 
-		<link rel="stylesheet" type="text/css" href="/motomapia.css" />
+		<link rel="stylesheet" type="text/css" href="/css/motomapia.css" />
 		<link rel="stylesheet" type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.13/themes/ui-lightness/jquery-ui.css" />
 		
 		<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
 		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js"></script>
 		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.13/jquery-ui.min.js"></script>
-		<script type="text/javascript" src="/motomapia.js"></script>
+		<script type="text/javascript" src="/js/gen/motomapia.js"></script>
 	</head>
 
 	<body>
@@ -67,6 +67,15 @@
 			<h3>How do I load the downloaded file onto my GPS?</h3>
 			It depends on your model of GPS.  You're on your own here.
 		</div>
+
+		<script type="text/javascript" charset="utf8" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+		<script type="text/javascript" src="/js/require.js"></script>
+		<script type="text/javascript">
+			<%@ include file="config.require.js" %>
+		</script>
+		<script type="text/javascript">
+			require(['app/motomapia']);
+		</script>
 		
 		<script type="text/javascript">
 			var _gaq = _gaq || [];
