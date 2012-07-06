@@ -74,10 +74,26 @@
 			<fileset dir="war">
 				<exclude name="WEB-INF/classes/**" />
 				<exclude name="WEB-INF/appengine-generated/**" />
+				<exclude name="js/app/**" />
 			</fileset>
 		</copy>
 		<jar destfile="${staging.dir}/WEB-INF/lib/classes.jar" basedir="${classes.dir}" />
 
+		<!-- Run the optimizer -->
+		<apply executable="r.js" dir="war" dest="${staging.dir}" relative="true">
+			<arg value="-o"/> 
+			<srcfile prefix="name=js/app/"/> 
+			<targetfile prefix="out=../target/staging/js/app/"/> 
+			<arg value="baseUrl=."/>
+			<!--
+			--> 
+			
+			<fileset dir="war/js/app" casesensitive="yes">
+				<include name="**/*.js"/>
+			</fileset>
+			<mapper type="flatten"/>
+		</apply>
+		
 		<appcfg action="update" war="${staging.dir}" />
 	</target>
 </project>
