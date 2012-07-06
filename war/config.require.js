@@ -7,12 +7,12 @@ require.config({
 		// The explanation here makes even less sense: https://github.com/jrburke/requirejs/issues/163
 		//gmaps: 'http://maps.google.com/maps/api/js?sensor=false',
 		
-		jqueryui: 'http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.19/jquery-ui.min',
-		facebook: 'http://connect.facebook.net/en_US/all',
-		browserid: 'http://browserid.org/include'
+		//jqueryui: 'http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.19/jquery-ui.min',
+		//facebook: 'http://connect.facebook.net/en_US/all',
+		//persona: 'http://browserid.org/include'
 	}
 });
 
 // This a workaround for requirejs cracksmokery.
-requireDependency = {};
-requireDependency.gmaps = 'http://maps.google.com/maps/api/js?sensor=false';
+//requireDependency = {};
+//requireDependency.gmaps = 'http://maps.google.com/maps/api/js?sensor=false';

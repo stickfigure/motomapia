@@ -63,8 +63,9 @@
 			It depends on your model of GPS.  You're on your own here.
 		</div>
 
-		<!-- These are a pain to work with in requirejs -->
+		<!-- These are a huge pain to work with when trying to use r.js, so just do it the old-fashioned way -->
 		<script type="text/javascript" charset="utf8" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+		<script type="text/javascript" charset="utf8" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.19/jquery-ui.min"></script>
 		<script type="text/javascript" charset="utf8" src="http://maps.google.com/maps/api/js?sensor=false"></script>
 		
 		<script type="text/javascript" src="/js/require.js"></script>

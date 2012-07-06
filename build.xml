@@ -81,10 +81,10 @@
 
 		<!-- Run the optimizer -->
 		<!-- Ant is truly hopeless
-		<apply executable="r.js" dir="war/js" dest="${staging.dir}" relative="true">
+		<apply executable="r.js" dir="war" dest="${staging.dir}" relative="true">
 			<arg value="-o"/> 
-			<srcfile prefix="name=app/"/> 
-			<targetfile prefix="out=../../target/staging/js/app/"/> 
+			<srcfile prefix="name=app/page/"/>  the problem is no way to trim off the .js 
+			<targetfile prefix="out=../target/staging/js/app/page/"/> 
 			<arg value="baseUrl=js"/>
 			
 			<fileset dir="war/js/app/page" casesensitive="yes">
