@@ -6,7 +6,6 @@ package com.motomapia;
 import com.googlecode.objectify.Objectify;
 import com.googlecode.objectify.TxnWork;
 import com.googlecode.objectify.util.cmd.ObjectifyWrapper;
-import com.googlecode.objectify.x.ObjectifyService;
 
 /**
  * Our basic data access interface.  Extends the basic Objectify interface to add our custom logic.
@@ -16,17 +15,12 @@ import com.googlecode.objectify.x.ObjectifyService;
 public class Ofy extends ObjectifyWrapper<Ofy, OfyFactory>
 {
 	/**
-	 * This is a temporary workaround to handle push() and pop() without impacting the objectify core.
+	 * Get rid of the extra parameter
 	 */
 	abstract public static class Work<R> implements TxnWork<Ofy, R> {
 		@Override
 		final public R run(Ofy ofy) {
-			try {
-				ObjectifyService.push(ofy);
-				return run();
-			} finally {
-				ObjectifyService.pop();
-			}
+			return run();
 		}
 
 		abstract public R run();

@@ -13,8 +13,9 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.servlet.GuiceServletContextListener;
 import com.google.inject.servlet.ServletModule;
+import com.googlecode.objectify.ObjectifyService;
 import com.googlecode.objectify.cache.AsyncCacheFilter;
-import com.googlecode.objectify.x.ObjectifyService;
+import com.motomapia.auth.BraceletFilter;
 import com.motomapia.util.GuiceResteasyFilterDispatcher;
 
 
@@ -35,7 +36,9 @@ public class GuiceConfig extends GuiceServletContextListener
 		@Override
 		protected void configureServlets() {
 			filter("/*").through(AsyncCacheFilter.class);
+			filter("/*").through(BraceletFilter.class);
 			filter("/api/*").through(GuiceResteasyFilterDispatcher.class);
+			
 			serve("/download/*").with(DownloadServlet.class);
 		}
 	}

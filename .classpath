@@ -24,6 +24,7 @@
 	<classpathentry kind="lib" path="war/WEB-INF/lib/slf4j-jdk14-1.6.3.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/resteasy-jackson-provider-2.2.2.GA.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/guava-12.0.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/commons-codec-1.4.jar"/>
 	<classpathentry kind="con" path="com.google.appengine.eclipse.core.GAE_CONTAINER"/>
 	<classpathentry kind="output" path="war/WEB-INF/classes"/>
 </classpath>

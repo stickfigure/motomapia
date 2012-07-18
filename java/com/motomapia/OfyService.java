@@ -5,10 +5,11 @@ package com.motomapia;
 
 import javax.inject.Singleton;
 
-import com.googlecode.objectify.x.ObjectifyService;
+import com.googlecode.objectify.ObjectifyService;
 
 /**
- *
+ * Gives us our custom version rather than the standard Objectify one. 
+ * 
  * @author Jeff Schnitzer
  */
 @Singleton
@@ -24,7 +25,7 @@ public class OfyService
 	/**
 	 * @return our extension to ObjectifyFactory
 	 */
-	public static OfyFactory fact() {
-		return (OfyFactory)ObjectifyService.fact();
+	public static OfyFactory factory() {
+		return (OfyFactory)ObjectifyService.factory();
 	}
 }
