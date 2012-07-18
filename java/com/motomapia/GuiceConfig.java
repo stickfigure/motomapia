@@ -11,12 +11,15 @@ import lombok.extern.slf4j.Slf4j;
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
+import com.google.inject.matcher.Matchers;
 import com.google.inject.servlet.GuiceServletContextListener;
 import com.google.inject.servlet.ServletModule;
 import com.googlecode.objectify.ObjectifyFilter;
 import com.googlecode.objectify.ObjectifyService;
 import com.motomapia.auth.BraceletFilter;
 import com.motomapia.util.GuiceResteasyFilterDispatcher;
+import com.motomapia.util.txn.Transact;
+import com.motomapia.util.txn.TransactInterceptor;
 
 
 /**
@@ -51,6 +54,9 @@ public class GuiceConfig extends GuiceServletContextListener
 		 */
 		@Override
 		protected void configure() {
+			// Lets us use @Transact
+			bindInterceptor(Matchers.any(), Matchers.annotatedWith(Transact.class), new TransactInterceptor());
+
 			// External things that don't have Guice annotations
 			bind(ObjectifyFilter.class).in(Singleton.class);
 
