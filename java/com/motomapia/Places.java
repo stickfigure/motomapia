@@ -26,7 +26,7 @@ import com.motomapia.wikimapia.Wikimapia;
  * 
  * @author Jeff Schnitzer
  */
-@Path("/api/places")
+@Path("/")
 public class Places
 {
 	/** */
@@ -39,6 +39,7 @@ public class Places
 	 * This method fetches places from Wikimapia, syncs them into our datastore, and returns placemarks to the client.
 	 */
 	@GET
+	@Path("/places")
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<Placemark> getPlaces(
 			@QueryParam("swLat") float swLat,

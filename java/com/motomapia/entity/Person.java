@@ -64,7 +64,7 @@ public class Person
 		this.lastLogin = new Date();
 	}
 
-	public Key<Person> getKey() {
-		return key(id);
-	}
+//	public Key<Person> getKey() {
+//		return key(id);
+//	}
 }

@@ -1,0 +1,64 @@
+// Our CSS styles written in LESS
+
+.border-radius(@radius) {
+  -webkit-border-radius: @radius;
+     -moz-border-radius: @radius;
+          border-radius: @radius;
+}
+
+html {
+	height: 100%;
+}
+
+body {
+	margin: 0;
+	padding: 0;
+	height: 100%;
+	font-family: Frutiger, "Frutiger Linotype", Univers, Calibri, "Gill Sans", "Gill Sans MT", "Myriad Pro", Myriad, "DejaVu Sans Condensed", "Liberation Sans", "Nimbus Sans L", Tahoma, Geneva, "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+.brand {
+	.moto { color: #df8e00; }
+	.mapia { color: #3ca0d0; }
+}
+.subtitle {
+	font-style: italic;
+}
+
+#busy {
+	display: none;
+	margin-left: 4em;
+	margin-top: 8px;
+}
+#error {
+	display: none;
+	margin-left: 4.5em;
+	margin-top: 3px;
+}
+
+#loginButton, #logoutButton {
+	display: none;
+}
+
+#map {
+	position: absolute;
+	width: 100%;
+	top: 40px;	// the bootstrap navbar is 40px tall
+	bottom: 0;
+
+	img {max-width: inherit;}	// Fixes weird control drawing glitch:  https://groups.google.com/d/topic/google-maps-js-api-v3/3YIftYyNmyk/discussion
+}
+
+// This starts invisible, gets displayed and moved around when hovering over placemarks
+#placeName {
+	display: none;
+	position: fixed;
+	
+	color: #E8E6C1;
+	background-color: #c3390b;
+	border: 1px solid #380e00;
+	padding: 3px;
+	font-size: 0.8em;
+	margin-top: 20px;
+	margin-left: 20px;
+}

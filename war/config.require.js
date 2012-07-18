@@ -1,6 +1,8 @@
 require.config({
-	baseUrl: 'js',
+	baseUrl: '/js',
 	paths: {
+		persona: 'https://browserid.org/include'
+		
 		//jquery: 'https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min',
 		
 		// This makes no sense; it adds .js to the end and causes google to reject the request.

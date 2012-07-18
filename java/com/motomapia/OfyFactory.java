@@ -10,6 +10,8 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.google.inject.Injector;
 import com.googlecode.objectify.ObjectifyFactory;
+import com.motomapia.entity.EmailLookup;
+import com.motomapia.entity.Person;
 import com.motomapia.entity.Place;
 
 /**
@@ -32,6 +34,8 @@ public class OfyFactory extends ObjectifyFactory
 		long time = System.currentTimeMillis();
 
 		this.register(Place.class);
+		this.register(Person.class);
+		this.register(EmailLookup.class);
 
 		long millis = System.currentTimeMillis() - time;
 		log.info("Registration took " + millis + " millis");

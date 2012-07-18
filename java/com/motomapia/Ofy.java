@@ -46,4 +46,10 @@ public class Ofy extends ObjectifyWrapper<Ofy, OfyFactory>
 	public OfyFactory fact() {
 		return this.getFactory();
 	}
+
+	/** More wrappers, fun */
+	@Override
+	public OfyLoader load() {
+		return new OfyLoader(super.load());
+	}
 }

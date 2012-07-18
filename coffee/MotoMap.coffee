@@ -63,6 +63,8 @@ define ['app/polylines'], (polylines) ->
 				zoom: 8
 				center: new google.maps.LatLng(37, -122)
 				mapTypeId: google.maps.MapTypeId.ROADMAP
+				#mapTypeControlOptions:
+				#	position: google.maps.ControlPosition.TOP_LEFT
 			
 			@currentPolygonOpts = @roadmapPolygonOpts
 			
@@ -85,7 +87,7 @@ define ['app/polylines'], (polylines) ->
 			bounds = @map.getBounds()
 			sw = bounds.getSouthWest()
 			ne = bounds.getNorthEast()
-			$.get '/api/places', { swLat: sw.lat(), swLng: sw.lng(), neLat: ne.lat(), neLng: ne.lng() }, (data) =>
+			$.get '/places', { swLat: sw.lat(), swLng: sw.lng(), neLat: ne.lat(), neLng: ne.lng() }, (data) =>
 				marker.setMap(null) for id, marker of @markers
 				@markers = {}
 				@createMarker(placemark) for placemark in data
