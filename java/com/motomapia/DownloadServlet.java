@@ -70,8 +70,11 @@ public class DownloadServlet extends HttpServlet
 		
 		int count = 0;
 		
-		for (Place place: ofy().load().type(Place.class).filter("cells in", cells))
-		{
+		for (Place place: ofy().load().type(Place.class).filter("cells in", cells)) {
+			// The geocell query is not exact, so let's exclude items that don't match the bounding box
+			if (!place.isIn(bb))
+				continue;
+			
 			writer.write("" + place.getCenter().getLatitude());
 			writer.write("" + place.getCenter().getLongitude());
 			String name = (place.getName() == null || place.getName().trim().length() == 0) ? "Unknown" : place.getName();

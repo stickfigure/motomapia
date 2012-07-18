@@ -5,7 +5,7 @@ require ['app/MotoMap', 'app/authMachine'], (MotoMap, authMachine) ->
 		motoMap = new MotoMap("map")
 		
 		$('#download').click ->
-			download(motoMap.map.getBounds())
+			motoMap.download()
 		
 		loginButton = $('#loginButton')
 		logoutButton = $('#logoutButton')

@@ -15,6 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.beoui.geocell.GeocellManager;
+import com.beoui.geocell.model.BoundingBox;
 import com.google.appengine.api.datastore.GeoPt;
 import com.googlecode.objectify.annotation.Cache;
 import com.googlecode.objectify.annotation.Entity;
@@ -110,5 +111,15 @@ public class Place implements Serializable
 			this.updated = new Date();
 		
 		return changed;
+	}
+	
+	/**
+	 * @return true if the center is inside the bounding box
+	 */
+	public boolean isIn(BoundingBox bb) {
+		return getCenter().getLatitude() < bb.getNorth()
+				&& getCenter().getLatitude() > bb.getSouth()
+				&& getCenter().getLongitude() > bb.getWest()
+				&& getCenter().getLongitude() < bb.getEast();
 	}
 }

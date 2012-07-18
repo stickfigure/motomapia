@@ -9,25 +9,6 @@ define ['app/polylines'], (polylines) ->
 		if x then $('#error').show() else $('#error').hide()
 		
 	#
-	# Start a download
-	# bounds is a LatLngBounds
-	#
-	download = (bounds) -> 
-		sw = bounds.getSouthWest()
-		ne = bounds.getNorthEast()
-		
-		url = '/download/poi.csv?swLat=' + sw.lat() + '&swLng=' + sw.lng() + '&neLat=' + ne.lat() + '&neLng=' + ne.lng()
-	#	window.location.href = url
-		iframe = document.getElementById('downloader');
-		if iframe == null
-			iframe = document.createElement('iframe');  
-			iframe.id = 'downloader';
-			iframe.style.display = 'none';
-			document.body.appendChild(iframe);
-	
-		iframe.src = url;
-		
-	#
 	# Tracks mouse movement in a variable
 	#
 	mouseX = null
@@ -106,7 +87,7 @@ define ['app/polylines'], (polylines) ->
 	
 		# Add a marker to our map
 		#
-		createMarker: (placemark) ->
+		createMarker: (placemark) =>
 			poly = new google.maps.Polygon(@currentPolygonOpts)
 			poly.setPath(polylines.decode(placemark.polygon))
 			poly.setMap(@map)
@@ -124,3 +105,21 @@ define ['app/polylines'], (polylines) ->
 			google.maps.event.addListener poly, 'mouseout', =>
 				poly.setOptions(@currentPolygonOpts)
 				@placeName.hide()
+
+		# Download current viewport
+		#
+		download: =>
+			bounds = @map.getBounds()
+			sw = bounds.getSouthWest()
+			ne = bounds.getNorthEast()
+			
+			url = '/download/poi.csv?swLat=' + sw.lat() + '&swLng=' + sw.lng() + '&neLat=' + ne.lat() + '&neLng=' + ne.lng()
+		#	window.location.href = url
+			iframe = document.getElementById('downloader');
+			if iframe == null
+				iframe = document.createElement('iframe');  
+				iframe.id = 'downloader';
+				iframe.style.display = 'none';
+				document.body.appendChild(iframe);
+		
+			iframe.src = url;
