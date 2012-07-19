@@ -6,7 +6,7 @@ import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
 
 import com.googlecode.objectify.TxnType;
-import com.motomapia.Ofy.Work;
+import com.googlecode.objectify.Work;
 
 /**
  * Interceptor which, when configured with Guice, will create EJB-style transaction behavior.

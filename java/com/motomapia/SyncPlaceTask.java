@@ -8,7 +8,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import com.google.appengine.api.taskqueue.DeferredTask;
-import com.motomapia.Ofy.VoidWork;
+import com.googlecode.objectify.VoidWork;
 import com.motomapia.entity.Place;
 import com.motomapia.wikimapia.WikiPlace;
 
