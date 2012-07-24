@@ -18,7 +18,7 @@
 	<property name="lib.buildonly.dir" location="build-only" />
 	<property name="classes.dir" location="${war.dir}/WEB-INF/classes" />
 
-	<property name="build.dir" location="target" />
+	<property name="build.dir" location="/tmp/motomapia" />
 	<property name="staging.dir" location="${build.dir}/staging" />
 	
 	<property name="appengine.sdk.dir" location="../appengine-java-sdk" />
@@ -74,7 +74,10 @@
 			<fileset dir="war">
 				<exclude name="WEB-INF/classes/**" />
 				<exclude name="WEB-INF/appengine-generated/**" />
+				
+				<!-- For now, don't try to use the optimizer
 				<exclude name="js/app/**" />
+				-->
 			</fileset>
 		</copy>
 		<jar destfile="${staging.dir}/WEB-INF/lib/classes.jar" basedir="${classes.dir}" />
@@ -94,6 +97,7 @@
 			<mapper type="identity"/>
 		</apply>
 		--> 
+		<!-- This is how the optimizer should work, but we're not using it at the moment
 		<apply executable="../optimize.sh" dir="war" relative="true">
 			<srcfile/> 
 			
@@ -103,9 +107,8 @@
 			
 			<mapper type="flatten"/>
 		</apply>
+		-->
 		
-		<!--
 		<appcfg action="update" war="${staging.dir}" />
-		--> 
 	</target>
 </project>

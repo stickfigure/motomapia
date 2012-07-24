@@ -3,11 +3,16 @@
 
 package com.motomapia;
 
+import java.util.Map;
+
 import javax.inject.Singleton;
 import javax.servlet.ServletContextEvent;
 
 import lombok.extern.slf4j.Slf4j;
 
+import com.google.appengine.tools.appstats.AppstatsFilter;
+import com.google.appengine.tools.appstats.AppstatsServlet;
+import com.google.common.collect.Maps;
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
@@ -38,6 +43,12 @@ public class GuiceConfig extends GuiceServletContextListener
 		 */
 		@Override
 		protected void configureServlets() {
+			Map<String, String> appstatsParams = Maps.newHashMap();
+			appstatsParams.put("logMessage", "Appstats: /admin/appstats/details?time={ID}");
+			appstatsParams.put("calculateRpcCosts", "true");
+			filter("/*").through(AppstatsFilter.class, appstatsParams);
+			serve("/appstats/*").with(AppstatsServlet.class);
+
 			filter("/*").through(ObjectifyFilter.class);
 			filter("/*").through(BraceletFilter.class);
 			filter("/*").through(GuiceResteasyFilterDispatcher.class);
@@ -58,6 +69,8 @@ public class GuiceConfig extends GuiceServletContextListener
 			bindInterceptor(Matchers.any(), Matchers.annotatedWith(Transact.class), new TransactInterceptor());
 
 			// External things that don't have Guice annotations
+			bind(AppstatsFilter.class).in(Singleton.class);
+			bind(AppstatsServlet.class).in(Singleton.class);
 			bind(ObjectifyFilter.class).in(Singleton.class);
 
 			bind(Places.class);
