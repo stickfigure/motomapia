@@ -20,7 +20,6 @@ import com.google.inject.matcher.Matchers;
 import com.google.inject.servlet.GuiceServletContextListener;
 import com.google.inject.servlet.ServletModule;
 import com.googlecode.objectify.ObjectifyFilter;
-import com.googlecode.objectify.ObjectifyService;
 import com.motomapia.auth.BraceletFilter;
 import com.motomapia.util.GuiceResteasyFilterDispatcher;
 import com.motomapia.util.txn.Transact;
@@ -65,6 +64,8 @@ public class GuiceConfig extends GuiceServletContextListener
 		 */
 		@Override
 		protected void configure() {
+			requestStaticInjection(OfyFactory.class);
+			
 			// Lets us use @Transact
 			bindInterceptor(Matchers.any(), Matchers.annotatedWith(Transact.class), new TransactInterceptor());
 
@@ -96,13 +97,7 @@ public class GuiceConfig extends GuiceServletContextListener
 	 */
 	@Override
 	protected Injector getInjector() {
-		Injector inj = Guice.createInjector(new MotomapiaServletModule(), new MotompaiaModule());
-		
-		// Here we set up the OfyFactory that will replace the standard ObjectifyFactory
-		OfyFactory fact = inj.getInstance(OfyFactory.class);
-		ObjectifyService.setFactory(fact);
-		
-		return inj;
+		return Guice.createInjector(new MotomapiaServletModule(), new MotompaiaModule());
 	}
 
 }

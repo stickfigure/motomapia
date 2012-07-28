@@ -24,13 +24,10 @@ import com.motomapia.entity.Place;
 public class OfyFactory extends ObjectifyFactory
 {
 	/** */
-	Injector injector;
+	@Inject private static Injector injector;
 
 	/** Register our entity types*/
-	@Inject
-	public OfyFactory(Injector injector) {
-		this.injector = injector;
-
+	public OfyFactory() {
 		long time = System.currentTimeMillis();
 
 		this.register(Place.class);
