@@ -7,7 +7,7 @@
 <project name="motomapia" default="update-objectify" basedir=".">
 
 	<property name="name" value="${ant.project.name}" />
-	
+
 	<property file="user.properties" />
 	<property file="${user.home}/build.properties" />
 	<property file="build.properties" />
@@ -20,23 +20,23 @@
 
 	<property name="build.dir" location="/tmp/motomapia" />
 	<property name="staging.dir" location="${build.dir}/staging" />
-	
+
 	<property name="appengine.sdk.dir" location="../appengine-java-sdk" />
 	<import file="${appengine.sdk.dir}/config/user/ant-macros.xml" />
-	
+
 	<target name="update-htmleasy" depends="">
 		<copy file="${m2.dir}/com/googlecode/htmleasy/htmleasy/0.7-SNAPSHOT/htmleasy-0.7-SNAPSHOT.jar" todir="${lib.dir}" />
 	</target>
-	
+
 	<target name="update-objectify" depends="">
 		<copy todir="${lib.dir}">
-			<fileset dir="../objectify/target">
+			<fileset dir="../objectify/build/libs">
 				<include name="objectify-*.jar" />
 			</fileset>
-			<regexpmapper from="objectify-SNAPSHOT*.jar" to="objectify.jar" />
+			<regexpmapper from="objectify-[^-]*.jar" to="objectify.jar" />
 		</copy>
 	</target>
-	
+
 	<target name="update-unsuck" depends="">
 		<copy file="../unsuck/target/unsuck.jar" todir="${lib.dir}" />
 	</target>
@@ -74,7 +74,7 @@
 			<fileset dir="war">
 				<exclude name="WEB-INF/classes/**" />
 				<exclude name="WEB-INF/appengine-generated/**" />
-				
+
 				<!-- For now, don't try to use the optimizer
 				<exclude name="js/app/**" />
 				-->
@@ -85,30 +85,30 @@
 		<!-- Run the optimizer -->
 		<!-- Ant is truly hopeless
 		<apply executable="r.js" dir="war" dest="${staging.dir}" relative="true">
-			<arg value="-o"/> 
-			<srcfile prefix="name=app/page/"/>  the problem is no way to trim off the .js 
-			<targetfile prefix="out=../target/staging/js/app/page/"/> 
+			<arg value="-o"/>
+			<srcfile prefix="name=app/page/"/>  the problem is no way to trim off the .js
+			<targetfile prefix="out=../target/staging/js/app/page/"/>
 			<arg value="baseUrl=js"/>
-			
+
 			<fileset dir="war/js/app/page" casesensitive="yes">
 				<include name="**/*.js"/>
 			</fileset>
-			
+
 			<mapper type="identity"/>
 		</apply>
-		--> 
+		-->
 		<!-- This is how the optimizer should work, but we're not using it at the moment
 		<apply executable="../optimize.sh" dir="war" relative="true">
-			<srcfile/> 
-			
+			<srcfile/>
+
 			<fileset dir="war/js/app/page" casesensitive="yes">
 				<include name="**/*.js"/>
 			</fileset>
-			
+
 			<mapper type="flatten"/>
 		</apply>
 		-->
-		
+
 		<appcfg action="update" war="${staging.dir}" />
 	</target>
 </project>
