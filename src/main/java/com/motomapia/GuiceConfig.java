@@ -23,6 +23,7 @@ import com.googlecode.objectify.ObjectifyFilter;
 import com.motomapia.action.Places;
 import com.motomapia.action.SignIn;
 import com.motomapia.auth.BraceletFilter;
+import com.motomapia.util.ObjectMapperProvider;
 import com.motomapia.util.txn.Transact;
 import com.motomapia.util.txn.TransactInterceptor;
 import com.sun.jersey.guice.spi.container.servlet.GuiceContainer;
@@ -73,6 +74,9 @@ public class GuiceConfig extends GuiceServletContextListener
 
 			// Lets us use @Transact
 			bindInterceptor(Matchers.any(), Matchers.annotatedWith(Transact.class), new TransactInterceptor());
+
+			// Use jackson for jaxrs
+			bind(ObjectMapperProvider.class);
 
 			// External things that don't have Guice annotations
 			bind(AppstatsFilter.class).in(Singleton.class);
