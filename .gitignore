@@ -3,4 +3,4 @@ target/
 test-output/
 .sass-cache/
 .settings/
-war/js/app
+src/main/webapp/js/app
