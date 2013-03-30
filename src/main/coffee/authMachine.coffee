@@ -22,7 +22,7 @@ define (require) ->
 				onlogout: @_onLogout
 
 		_onLogin: (assertion) =>
-			$.post '/login/persona', { assertion: assertion }, (person) =>
+			$.post '/api/login/persona', { assertion: assertion }, (person) =>
 				@identity = person.email
 				@onLoginSuccess(person)
 
