@@ -8,16 +8,16 @@ define (require) ->
 	# maintains the authorization state of the user
 	class AuthMachine
 		identity: null
-		
+
 		constructor: ->
 			# see AuthCookie.java for format of cookie
 			loginCookie = cookies.get('login')
 			if loginCookie?
 				cookieParts = loginCookie.split(":")
 				@identity = decodeURIComponent(cookieParts[1])	# note this is urlencoded
-				
+
 			navigator.id.watch
-				loggedInEmail: @identity
+				loggedInUser: @identity
 				onlogin: @_onLogin
 				onlogout: @_onLogout
 
@@ -45,5 +45,5 @@ define (require) ->
 		# replace this method to cause logout to do something else
 		onLogoutSuccess: =>
 			# do nothing
-			
+
 	return new AuthMachine()
