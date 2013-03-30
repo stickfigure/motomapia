@@ -145,8 +145,8 @@
 				<version>2.5.1</version>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<configuration>
-					<source>1.6</source>
-					<target>1.6</target>
+					<source>1.7</source>
+					<target>1.7</target>
 				</configuration>
 			</plugin>
 
@@ -177,6 +177,11 @@
 				<groupId>com.google.appengine</groupId>
 				<artifactId>appengine-maven-plugin</artifactId>
 				<version>${appengine.target.version}</version>
+				<configuration>
+					<jvmFlags>
+						<jvmFlag>-Ddatastore.default_high_rep_job_policy_unapplied_job_pct=20</jvmFlag>
+					</jvmFlags>
+				</configuration>
 			</plugin>
 
 			<plugin>

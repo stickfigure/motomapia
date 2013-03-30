@@ -22,6 +22,7 @@ import com.google.inject.servlet.ServletModule;
 import com.googlecode.objectify.ObjectifyFilter;
 import com.motomapia.action.Places;
 import com.motomapia.action.SignIn;
+import com.motomapia.action.TxnTest;
 import com.motomapia.auth.BraceletFilter;
 import com.motomapia.util.ObjectMapperProvider;
 import com.motomapia.util.txn.Transact;
@@ -85,6 +86,7 @@ public class GuiceConfig extends GuiceServletContextListener
 
 			bind(Places.class);
 			bind(SignIn.class);
+			bind(TxnTest.class);
 		}
 	}
 
