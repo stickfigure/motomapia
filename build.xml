@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 
 <!--
-	Lets us run some basic tooling.
+	This file is vestigal from the old pre-maven build system. It should probably be removed.
 -->
 
 <project name="motomapia" default="update-objectify" basedir=".">
