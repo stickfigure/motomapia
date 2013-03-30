@@ -158,6 +158,12 @@
 							<filtering>true</filtering>
 							<targetPath>WEB-INF</targetPath>
 						</resource>
+
+						<resource>
+							<directory>${project.build.directory}/javascripts</directory>
+							<filtering>false</filtering>
+							<targetPath>js/app</targetPath>
+						</resource>
 					</webResources>
 				</configuration>
 			</plugin>
