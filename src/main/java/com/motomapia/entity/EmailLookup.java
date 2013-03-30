@@ -5,8 +5,8 @@ package com.motomapia.entity;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
+import com.googlecode.objectify.Ref;
 import com.googlecode.objectify.annotation.Cache;
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
@@ -41,13 +41,17 @@ public class EmailLookup
 	/** */
 	@Index
 	@Load
-	@Getter @Setter
-	Person person;
+	Ref<Person> person;
 
 	/** */
 	public EmailLookup(String email, Person person) {
 		this.normal = normalize(email);
 		this.email = email;
-		this.person = person;
+		this.person = Ref.create(person);
+	}
+
+	/** Hide the Ref from clients */
+	public Person getPerson() {
+		return person.get();
 	}
 }
