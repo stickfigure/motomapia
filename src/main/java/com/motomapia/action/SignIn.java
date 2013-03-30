@@ -28,7 +28,7 @@ import static com.motomapia.OfyService.ofy;
 /**
  * Methods related to signing in and registering.
  */
-@Path("/")
+@Path("/login")
 @Slf4j
 public class SignIn
 {
@@ -40,14 +40,14 @@ public class SignIn
 	 * Sets cookies and logs them into the Bracelet.
 	 */
 	@POST
-	@Path("/login/persona")
+	@Path("/persona")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Person loginPersona(@FormParam("assertion") String assertion) throws IOException {
 
 		String email = verify(assertion);
 
 		Person who = login(email);
-		
+
 		doorman.login(who);
 
 		return who;
@@ -58,7 +58,7 @@ public class SignIn
 	 */
 	@Transact(TxnType.REQUIRED)
 	Person login(final String email) {
-		
+
 		// Might be a simple login rather than a new account
 		Person result = ofy().load().personByEmail(email);
 		if (result != null) {
@@ -85,7 +85,7 @@ public class SignIn
 			audience += ":" + request.getServerPort();
 
 		log.debug("Audience is: " + audience);
-		
+
 		Assertion ass = BrowserID.verify(assertion, audience);
 		log.debug("Asserting " + ass);
 
