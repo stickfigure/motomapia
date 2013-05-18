@@ -3,29 +3,23 @@
 
 package com.motomapia;
 
-import com.googlecode.objectify.Objectify;
-import com.googlecode.objectify.util.cmd.ObjectifyWrapper;
+import com.googlecode.objectify.impl.ObjectifyImpl;
 
 /**
  * Our basic data access interface.  Extends the basic Objectify interface to add our custom logic.
  *
  * @author Jeff Schnitzer
  */
-public class Ofy extends ObjectifyWrapper<Ofy, OfyFactory>
+public class Ofy extends ObjectifyImpl<Ofy>
 {
 	/** */
-	public Ofy(Objectify base) {
+	public Ofy(OfyFactory base) {
 		super(base);
-	}
-
-	/** Shortcut */
-	public OfyFactory fact() {
-		return this.getFactory();
 	}
 
 	/** More wrappers, fun */
 	@Override
 	public OfyLoader load() {
-		return new OfyLoader(super.load());
+		return new OfyLoader(this);
 	}
 }

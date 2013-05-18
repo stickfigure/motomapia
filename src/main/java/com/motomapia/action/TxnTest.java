@@ -3,6 +3,8 @@
 
 package com.motomapia.action;
 
+import static com.motomapia.OfyService.ofy;
+
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -17,8 +19,6 @@ import com.googlecode.objectify.Key;
 import com.googlecode.objectify.TxnType;
 import com.motomapia.entity.Person;
 import com.motomapia.util.txn.Transact;
-
-import static com.motomapia.OfyService.ofy;
 
 /**
  * Test out some odd issues with the @Transact code
@@ -41,9 +41,9 @@ public class TxnTest
 	 */
 	@Transact(TxnType.REQUIRED)
 	Person update(Key<Person> key, long id2) {
-		ofy().transactionless().load().type(Person.class).id(id2).get();
+		ofy().transactionless().load().type(Person.class).id(id2).now();
 
-		Person pers = ofy().load().key(key).get();
+		Person pers = ofy().load().key(key).now();
 		pers.loggedIn();
 		ofy().save().entity(pers);
 

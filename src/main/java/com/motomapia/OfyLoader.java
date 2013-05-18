@@ -3,22 +3,21 @@
 
 package com.motomapia;
 
-import com.googlecode.objectify.cmd.Loader;
-import com.googlecode.objectify.util.cmd.LoaderWrapper;
+import static com.motomapia.OfyService.ofy;
+
+import com.googlecode.objectify.impl.LoaderImpl;
 import com.motomapia.entity.EmailLookup;
 import com.motomapia.entity.Person;
-
-import static com.motomapia.OfyService.ofy;
 
 /**
  * Extend the Loader command with our own logic
  *
  * @author Jeff Schnitzer
  */
-public class OfyLoader extends LoaderWrapper<OfyLoader>
+public class OfyLoader extends LoaderImpl<OfyLoader>
 {
 	/** */
-	public OfyLoader(Loader base) {
+	public OfyLoader(Ofy base) {
 		super(base);
 	}
 
@@ -40,7 +39,7 @@ public class OfyLoader extends LoaderWrapper<OfyLoader>
 	 * Gets the EmailLookup, or null if the normalized email is not in the system.
 	 */
 	public EmailLookup email(String email) {
-		return ofy().load().type(EmailLookup.class).id(EmailLookup.normalize(email)).get();
+		return ofy().load().type(EmailLookup.class).id(EmailLookup.normalize(email)).now();
 	}
 
 }

@@ -46,6 +46,6 @@ public class OfyFactory extends ObjectifyFactory
 
 	@Override
 	public Ofy begin() {
-		return new Ofy(super.begin());
+		return new Ofy(this);
 	}
 }
