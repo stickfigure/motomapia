@@ -4,3 +4,5 @@ test-output/
 .sass-cache/
 .settings/
 src/main/webapp/js/app
+motomapia.iml
+.idea/
