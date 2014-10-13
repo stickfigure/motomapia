@@ -3,13 +3,6 @@
 
 package com.motomapia;
 
-import java.util.Map;
-
-import javax.inject.Singleton;
-import javax.servlet.ServletContextEvent;
-
-import lombok.extern.slf4j.Slf4j;
-
 import com.google.appengine.tools.appstats.AppstatsFilter;
 import com.google.appengine.tools.appstats.AppstatsServlet;
 import com.google.common.collect.Maps;
@@ -28,6 +21,10 @@ import com.motomapia.util.ObjectMapperProvider;
 import com.motomapia.util.txn.Transact;
 import com.motomapia.util.txn.TransactInterceptor;
 import com.sun.jersey.guice.spi.container.servlet.GuiceContainer;
+import lombok.extern.slf4j.Slf4j;
+import javax.inject.Singleton;
+import javax.servlet.ServletContextEvent;
+import java.util.Map;
 
 
 /**
@@ -71,7 +68,7 @@ public class GuiceConfig extends GuiceServletContextListener
 		 */
 		@Override
 		protected void configure() {
-			requestStaticInjection(OfyFactory.class);
+			requestStaticInjection(OfyService.class);
 
 			// Lets us use @Transact
 			bindInterceptor(Matchers.any(), Matchers.annotatedWith(Transact.class), new TransactInterceptor());

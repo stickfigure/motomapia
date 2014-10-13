@@ -3,17 +3,6 @@
 
 package com.motomapia.entity;
 
-import java.io.Serializable;
-import java.util.Date;
-import java.util.List;
-
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.beoui.geocell.GeocellManager;
 import com.beoui.geocell.model.BoundingBox;
 import com.google.appengine.api.datastore.GeoPt;
@@ -24,6 +13,15 @@ import com.googlecode.objectify.annotation.Index;
 import com.motomapia.util.GeoUtils;
 import com.motomapia.util.Utils;
 import com.motomapia.wikimapia.WikiPlace;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import java.io.Serializable;
+import java.util.Date;
+import java.util.List;
+import static com.motomapia.OfyService.ofy;
 
 /**
  * Cached version of a Wikimapia place.  Also includes geohash indexing so that
@@ -80,37 +78,33 @@ public class Place implements Serializable
 	}
 	
 	/**
-	 * Update any wikimapia data in this place from the specified WikiPlace.
-	 * @return true if the Place changed, false if it remains unchanged.
+	 * Update any wikimapia data in this place from the specified WikiPlace,
+	 * saving this entity as a deferred save.
 	 */
-	public boolean updateFrom(WikiPlace wikiPlace)
+	public void updateFrom(WikiPlace wikiPlace)
 	{
 		if (wikiPlace.getId() != this.id)
 			throw new IllegalArgumentException("Tried to update from mismatched WikiPlace");
 
-		boolean changed = false;
-		
-		if (!Utils.safeEquals(this.name, wikiPlace.getName()))
-		{
+		if (!Utils.safeEquals(this.name, wikiPlace.getName())) {
 			this.name = wikiPlace.getName();
-			changed = true;
+			save();
 		}
 		
 		String wikiPolyline = wikiPlace.getPolyline();
-		if (!wikiPolyline.equals(this.polygon))
-		{
+		if (!wikiPolyline.equals(this.polygon)) {
 			this.polygon = wikiPolyline;
 			this.pointCount = wikiPlace.getPolygon().length;
 			this.center = wikiPlace.getCenter();
 			this.area = wikiPlace.getArea();
 			this.cells = GeocellManager.generateGeoCell(GeoUtils.toPoint(this.center));
-			changed = true;
+			save();
 		}
-		
-		if (changed)
-			this.updated = new Date();
-		
-		return changed;
+	}
+
+	private void save() {
+		this.updated = new Date();
+		ofy().defer().save().entity(this);
 	}
 	
 	/**

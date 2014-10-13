@@ -39,12 +39,7 @@ public class SyncPlaceTask implements DeferredTask
 				if (place == null) {
 					ofy().save().entity(new Place(wikiPlace));
 				} else {
-					if (place.updateFrom(wikiPlace)) {
-						if (log.isInfoEnabled())
-							log.info("Updating " + place);
-
-						ofy().save().entity(place);
-					}
+					place.updateFrom(wikiPlace);
 				}
 			}
 		});
