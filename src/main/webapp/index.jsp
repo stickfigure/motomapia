@@ -52,7 +52,7 @@
 		
 		<div id="instructions" class="modal hide">
 			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal">×</button>
+				<button type="button" class="close" data-dismiss="modal">ï¿½</button>
 				<h3>Instructions</h3>
 			</div>
 			<div class="modal-body">
@@ -85,6 +85,10 @@
 				<h3>Why is there a Login button?</h3>
 				At the moment there is no benefit to logging in.  It only serves to demonstrate Persona login and
 				some nifty transactional behavior behind the scenes.  Look at the code.
+
+				<h3>Why doesn't Motomapia seem to work?</h3>
+				This is running on the free tier of Google App Engine and frequently goes over one or more quota
+				limitations. If you want this to work, deploy it yourself - Motomapia is really just a code demo.
 			</div>
 			<div class="modal-footer">
 				<a href="#" class="btn btn-primary" data-dismiss="modal">Close</a>
