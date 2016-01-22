@@ -13,7 +13,7 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 /**
- * Our version of ObjectifyFactory which integrates with Guice.  You could and convenience methods here too.
+ * Our version of ObjectifyFactory which integrates with Guice.  You could add convenience methods here too.
  *
  * @author Jeff Schnitzer
  */
